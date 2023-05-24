@@ -166,7 +166,7 @@ const App: Component = () => {
         const selectedX = selectedTile()?.x;
         const selectedY = selectedTile()?.y;
 
-        if (!selectedX || !selectedY) {
+        if (selectedX === undefined || selectedY === undefined) {
           console.log("Something went really wrong...")
           return
         }
