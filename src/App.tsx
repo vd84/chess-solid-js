@@ -3,6 +3,9 @@ import { Component, createSignal } from 'solid-js';
 import styles from './App.module.css';
 import "./index.css";
 import { STARTING_POS } from './chess/engine';
+import LetterSquare from './components/letterSquare';
+import NumberSquare from './components/numberSquare';
+import WebSocketConnection from './components/websocketConnection';
 
 type PieceType = "king" | "queen" | "rook" | "bishop" | "pawn" | "knight"
 
@@ -17,9 +20,11 @@ export type Tile = {
   y: number
 }
 
+const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+const numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
+
 const App: Component = () => {
-  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-  const numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
+
 
   const [playingAsColor, setPlayingAsColor] = createSignal("white")
   const [selectedTile, setSelectedTile] = createSignal<Tile>()
@@ -57,15 +62,11 @@ const App: Component = () => {
   };
 
   const renderLetterSquare = (index: number) => (
-    <div class={`letter-square ${playingAsColor() === "white" ? '' : 'flipped'}`} id={getLetters()[index]}>
-      {getLetters()[index]}
-    </div>
+    <LetterSquare getLetters={getLetters()} index={index} playingAsColor={playingAsColor()} />
   );
 
   const renderNumberSquare = (index: number) => (
-    <div class={`number-square ${playingAsColor() === "white" ? '' : 'flipped'}`} id={getNumbers()[index]}>
-      {getNumbers()[index]}
-    </div>
+    <NumberSquare getNumbers={getNumbers()} index={index} playingAsColor={playingAsColor()} />
   );
 
   const renderChessSquare = (i: number, j: number) => {
@@ -86,12 +87,9 @@ const App: Component = () => {
 
         setSelectedTile(undefined);
         setBoard(boardCopy);
-        console.log("dpsan")
       } else if (board()[i][j].piece) {
-        console.log("hrjsan")
         setSelectedTile(board()[i][j]);
       }
-      console.log(board())
     };
 
     const isTileSelected = () => {
@@ -111,7 +109,6 @@ const App: Component = () => {
     );
   };
 
-
   return (
     <div class={styles.App}>
       <header>
@@ -127,6 +124,7 @@ const App: Component = () => {
       <button onClick={() => setPlayingAsColor(playingAsColor() === "white" ? "black" : "white")}>
         Play as  {playingAsColor() === "white" ? "black" : "white"}
       </button>
+      <WebSocketConnection />
     </div>
   );
 };
