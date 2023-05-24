@@ -11,11 +11,11 @@ type Piece = Readonly<{
   type?: PieceType
 }>
 
-export type Tile = Readonly<{
+export type Tile = {
   piece?: Piece,
   x: number,
   y: number
-}>
+}
 
 const App: Component = () => {
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -80,14 +80,18 @@ const App: Component = () => {
         }
 
         const boardCopy = [...board()];
-        boardCopy[i][j] = boardCopy[selectedY][selectedX];
-        boardCopy[selectedY][selectedX] = { x: selectedX, y: selectedY };
+
+        boardCopy[i][j].piece = boardCopy[selectedY][selectedX].piece;
+        boardCopy[selectedY][selectedX].piece = undefined;
 
         setSelectedTile(undefined);
         setBoard(boardCopy);
+        console.log("dpsan")
       } else if (board()[i][j].piece) {
+        console.log("hrjsan")
         setSelectedTile(board()[i][j]);
       }
+      console.log(board())
     };
 
     const isTileSelected = () => {
